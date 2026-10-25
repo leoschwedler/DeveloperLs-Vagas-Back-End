@@ -1,5 +1,6 @@
 package com.schwedlr.vagas_api.job.service;
 
+import com.schwedlr.vagas_api.exception.JobNotFoundException;
 import com.schwedlr.vagas_api.job.domain.Job;
 import com.schwedlr.vagas_api.job.mapper.JobMapper;
 import com.schwedlr.vagas_api.job.repository.JobRepository;
@@ -39,13 +40,13 @@ public class JobService {
 
     // READ BY ID
     public JobResponse findById(Long id) {
-        Job job = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found: " + id));
+        Job job = repository.findById(id).orElseThrow(() -> new JobNotFoundException(id));
         return mapper.toResponse(job);
     }
 
     // UPDATE
     public JobResponse update(Long id, JobRequest request) {
-        Job job = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found: " + id));
+        Job job = repository.findById(id).orElseThrow(() -> new JobNotFoundException(id));
         mapper.updateDomain(request, job);
 
         Job jobSaved = repository.save(job);
@@ -55,7 +56,7 @@ public class JobService {
     // DELETE
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found: " + id);
+            throw new JobNotFoundException(id);
         }
         repository.deleteById(id);
     }
