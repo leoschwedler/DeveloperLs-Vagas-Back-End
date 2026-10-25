@@ -1,14 +1,14 @@
 package com.schwedlr.vagas_api.job.service;
 
+import com.schwedlr.vagas_api.exceptions.DuplicateJobException;
+import com.schwedlr.vagas_api.exceptions.JobNotFoundException;
 import com.schwedlr.vagas_api.job.domain.Job;
 import com.schwedlr.vagas_api.job.mapper.JobMapper;
 import com.schwedlr.vagas_api.job.repository.JobRepository;
 import com.schwedlr.vagas_api.job.request.JobRequest;
 import com.schwedlr.vagas_api.job.response.JobResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +27,9 @@ public class JobService {
 
     // CREATE
     public JobResponse create(JobRequest request) {
+        if (repository.existsByJobSourceAndExternalId(request.jobSource(), request.externalId())){
+            throw new DuplicateJobException(request.jobSource(), request.externalId());
+        }
         Job job = mapper.toDomain(request);
         repository.save(job);
         return mapper.toResponse(job);
@@ -39,13 +42,13 @@ public class JobService {
 
     // READ BY ID
     public JobResponse findById(Long id) {
-        Job job = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found: " + id));
+        Job job = repository.findById(id).orElseThrow(() -> new JobNotFoundException(id));
         return mapper.toResponse(job);
     }
 
     // UPDATE
     public JobResponse update(Long id, JobRequest request) {
-        Job job = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found: " + id));
+        Job job = repository.findById(id).orElseThrow(() -> new JobNotFoundException(id));
         mapper.updateDomain(request, job);
 
         Job jobSaved = repository.save(job);
@@ -55,7 +58,7 @@ public class JobService {
     // DELETE
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found: " + id);
+            throw new JobNotFoundException(id);
         }
         repository.deleteById(id);
     }
