@@ -1,10 +1,11 @@
 package com.schwedlr.vagas_api.job.controller;
 
 
-import com.schwedlr.vagas_api.job.mapper.JobMapper;
+
 import com.schwedlr.vagas_api.job.request.JobRequest;
 import com.schwedlr.vagas_api.job.response.JobResponse;
 import com.schwedlr.vagas_api.job.service.JobService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +17,13 @@ import java.util.List;
 public class JobController {
 
     private final JobService service;
-    private final JobMapper mapper;
-    public JobController(JobService service, JobMapper mapper) {
+    public JobController(JobService service) {
         this.service = service;
-        this.mapper = mapper;
     }
 
     // CREATE
     @PostMapping(value = "/create")
-    public ResponseEntity<JobResponse> create(@RequestBody JobRequest request){
+    public ResponseEntity<JobResponse> create(@Valid @RequestBody JobRequest request){
         JobResponse jobResponse = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(jobResponse);
     }
@@ -45,7 +44,7 @@ public class JobController {
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<JobResponse> update (
             @PathVariable Long id,
-            @RequestBody JobRequest request
+            @Valid @RequestBody JobRequest request
     ){
         return ResponseEntity.ok(service.update(id,request));
     }
