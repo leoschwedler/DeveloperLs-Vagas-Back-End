@@ -1,4 +1,4 @@
-package com.schwedlr.vagas_api.exception;
+package com.schwedlr.vagas_api.exceptions;
 
 import java.time.LocalDateTime;
 import java.util.Map;

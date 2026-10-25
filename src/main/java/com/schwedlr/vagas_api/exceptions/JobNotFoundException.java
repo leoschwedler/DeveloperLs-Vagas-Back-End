@@ -1,4 +1,4 @@
-package com.schwedlr.vagas_api.exception;
+package com.schwedlr.vagas_api.exceptions;
 
 public class JobNotFoundException extends RuntimeException {
     public JobNotFoundException(Long id) {

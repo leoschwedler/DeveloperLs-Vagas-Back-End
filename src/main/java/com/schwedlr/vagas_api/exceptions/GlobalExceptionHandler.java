@@ -1,4 +1,4 @@
-package com.schwedlr.vagas_api.exception;
+package com.schwedlr.vagas_api.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +25,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNotFound(JobNotFoundException exception) {
         ErrorResponse body = new ErrorResponse(404, exception.getMessage(), LocalDateTime.now(), null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    @ExceptionHandler(DuplicateJobException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicate(DuplicateJobException exception) {
+        ErrorResponse body = new ErrorResponse(409, exception.getMessage(), LocalDateTime.now(), null);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 }

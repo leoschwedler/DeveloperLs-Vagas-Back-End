@@ -1,15 +1,14 @@
 package com.schwedlr.vagas_api.job.service;
 
-import com.schwedlr.vagas_api.exception.JobNotFoundException;
+import com.schwedlr.vagas_api.exceptions.DuplicateJobException;
+import com.schwedlr.vagas_api.exceptions.JobNotFoundException;
 import com.schwedlr.vagas_api.job.domain.Job;
 import com.schwedlr.vagas_api.job.mapper.JobMapper;
 import com.schwedlr.vagas_api.job.repository.JobRepository;
 import com.schwedlr.vagas_api.job.request.JobRequest;
 import com.schwedlr.vagas_api.job.response.JobResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +27,9 @@ public class JobService {
 
     // CREATE
     public JobResponse create(JobRequest request) {
+        if (repository.existsByJobSourceAndExternalId(request.jobSource(), request.externalId())){
+            throw new DuplicateJobException(request.jobSource(), request.externalId());
+        }
         Job job = mapper.toDomain(request);
         repository.save(job);
         return mapper.toResponse(job);
