@@ -1,6 +1,6 @@
-package com.schwedlr.vagas_api.interviews;
+package com.schwedlr.vagas_api.interview.domain;
 
-import com.schwedlr.vagas_api.applications.Application;
+import com.schwedlr.vagas_api.application.domain.Application;
 import com.schwedlr.vagas_api.enums.Result;
 import com.schwedlr.vagas_api.enums.Type;
 import jakarta.persistence.*;
