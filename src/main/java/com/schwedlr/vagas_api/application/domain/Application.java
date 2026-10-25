@@ -1,7 +1,7 @@
-package com.schwedlr.vagas_api.applications;
+package com.schwedlr.vagas_api.application.domain;
 
 import com.schwedlr.vagas_api.enums.Status;
-import com.schwedlr.vagas_api.jobs.Job;
+import com.schwedlr.vagas_api.job.domain.Job;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

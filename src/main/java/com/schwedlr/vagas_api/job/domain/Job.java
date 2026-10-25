@@ -1,4 +1,4 @@
-package com.schwedlr.vagas_api.jobs;
+package com.schwedlr.vagas_api.job.domain;
 
 import com.schwedlr.vagas_api.enums.Source;
 import jakarta.persistence.*;
