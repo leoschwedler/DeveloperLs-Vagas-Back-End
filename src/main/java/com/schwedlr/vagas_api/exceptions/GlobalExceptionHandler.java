@@ -62,4 +62,16 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.badRequest().body(body);
     }
+
+    @ExceptionHandler(DuplicateApplicationException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateApplication(DuplicateApplicationException exception) {
+        ErrorResponse body = new ErrorResponse(409, exception.getMessage(), LocalDateTime.now(), null);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler(ApplicationNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(ApplicationNotFoundException exception) {
+        ErrorResponse body = new ErrorResponse(404, exception.getMessage(), LocalDateTime.now(), null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
 }
