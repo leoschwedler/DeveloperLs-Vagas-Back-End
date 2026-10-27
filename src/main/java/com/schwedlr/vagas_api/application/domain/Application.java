@@ -28,7 +28,7 @@ public class Application {
     private Timestamp appliedAt;
     private String notes;
     @UpdateTimestamp
-    @Column(name = "updated_at", insertable = false, updatable = true)
+    @Column(name = "updated_at", insertable = false)
     private Timestamp updatedAt;
     @OneToOne
     @JoinColumn(name = "job_id")
